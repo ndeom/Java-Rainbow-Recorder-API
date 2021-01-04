@@ -1,17 +1,21 @@
 package com.rainbowrecorder.api.models;
 
+import org.hibernate.annotations.GenericGenerator;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity(name = "comments")
+@Table(schema = "main")
 public class Comment implements Serializable {
 
     public Comment() {
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String comment_id;
 
     private String post_id;

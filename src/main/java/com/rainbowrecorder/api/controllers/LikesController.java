@@ -24,13 +24,44 @@ public class LikesController {
     }
 
     @RequestMapping(value = "/like", method = RequestMethod.PUT)
-    public ResponseEntity<Object> likePost(@RequestBody Like like) {
+    public ResponseEntity<Object> likePost(@RequestBody LikeRequest body) {
+        Like like = new Like();
+        like.setPost_id(body.getPostID());
+        like.setUser_id(body.getUserID());
         return likeService.likePost(like);
     }
 
     @RequestMapping(value = "/unlike", method = RequestMethod.DELETE)
-    public ResponseEntity<Object> unlikePost(@RequestBody Like like) {
+    public ResponseEntity<Object> unlikePost(@RequestBody LikeRequest body) {
+        Like like = new Like();
+        like.setPost_id(body.getPostID());
+        like.setUser_id(body.getUserID());
         return likeService.unlikePost(like);
     }
 
+}
+
+class LikeRequest {
+    private String userID;
+    private String postID;
+
+    public LikeRequest() {
+
+    }
+
+    public String getUserID() {
+        return userID;
+    }
+
+    public void setUserID(String userID) {
+        this.userID = userID;
+    }
+
+    public String getPostID() {
+        return postID;
+    }
+
+    public void setPostID(String postID) {
+        this.postID = postID;
+    }
 }

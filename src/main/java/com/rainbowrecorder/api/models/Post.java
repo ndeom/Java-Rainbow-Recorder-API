@@ -1,54 +1,67 @@
 package com.rainbowrecorder.api.models;
 
+import com.fasterxml.jackson.annotation.*;
+import org.hibernate.annotations.GenericGenerator;
+import org.locationtech.jts.geom.Point;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 import java.util.List;
-import java.util.Map;
 
 @Entity(name = "posts")
+@Table(schema = "main")
 public class Post {
 
-    public Post() {}
+    public Post() {
+    }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "uuid")
+    @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String post_id;
 
-    // likes object
-    // may need to set up @Query annotation in likes Class instead to get json aggregate
-    @OneToMany(targetEntity = com.rainbowrecorder.api.models.Like.class, cascade = CascadeType.ALL, mappedBy = "user_id")
-    private Map<String, String> likes;
+    @Column(insertable = false)
+    @JsonRawValue
+    private String likes;
 
-    // comments list
-    @OneToMany(targetEntity = com.rainbowrecorder.api.models.Comment.class, cascade= CascadeType.ALL, mappedBy = "post_id")
+    @OneToMany(targetEntity = Comment.class, mappedBy = "post_id", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Comment> comments;
 
+    @Column(nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private Timestamp timestamp;
 
-    private String location;
+    @JsonIgnore
+    @Column(columnDefinition = "geometry", nullable = false)
+    private Point location;
 
+    @Column(insertable = false)
+    private String location_point;
+
+    @Column(nullable = false)
     private String image;
 
     private String caption;
 
+    @Column(nullable = false)
     private String user_id;
 
-    public Map<String, String> getLikes() {
-        return likes;
+    public Point getLocation() {
+        return location;
     }
 
-    public void setLikes(Map<String, String> likes) {
-        this.likes = likes;
+    public void setLocation(Point location) {
+        this.location = location;
+    }
+
+    public String getLikes() {
+        return likes;
     }
 
     public List<Comment> getComments() {
         return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 
     public String getPost_id() {
@@ -75,12 +88,12 @@ public class Post {
         this.timestamp = timestamp;
     }
 
-    public String getLocation() {
-        return location;
+    public String getLocation_point() {
+        return location_point;
     }
 
-    public void setLocation(String location) {
-        this.location = location;
+    public void setLocation_point(String location_point) {
+        this.location_point = location_point;
     }
 
     public String getImage() {

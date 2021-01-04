@@ -5,13 +5,12 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
-import com.auth0.jwt.interfaces.Claim;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.rainbowrecorder.api.models.User;
+import org.springframework.http.HttpHeaders;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -38,6 +37,14 @@ public class JWTService {
             return Optional.empty();
         }
     }
+
+    public HttpHeaders setAndReturnAuthorizationHeader(String token) {
+        HttpHeaders headers = new HttpHeaders();
+        headers.set("Authorization", "Bearer " + token);
+        headers.set("Access-Control-Expose-Headers", "Authorization");
+        return headers;
+    }
+
 
     public Optional<String> getIdFromToken(String token) {
         try {

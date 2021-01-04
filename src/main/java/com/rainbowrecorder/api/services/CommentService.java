@@ -38,8 +38,7 @@ public class CommentService {
 
     @Async
     private CompletableFuture<Comment> commentAsync(Comment comment) {
-        Comment returnedComment = commentRepository.saveAndFlush(comment);
-        return CompletableFuture.completedFuture(returnedComment);
+        return CompletableFuture.completedFuture(commentRepository.saveAndFlush(comment));
     }
 
     public ResponseEntity<Object> uncomment(String comment_id) {

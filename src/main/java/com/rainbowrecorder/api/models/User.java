@@ -1,17 +1,19 @@
 package com.rainbowrecorder.api.models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.*;
 
 @Entity(name = "users")
+@Table(name = "users", schema = "main")
 public class User {
 
-    public User() {}
+    public User() {
+    }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(generator = "uuid") // generator denotes name of primary key generator
+    @GenericGenerator(name = "uuid", strategy = "uuid2") // generates id using uuid2 strategy
     private String user_id;
 
     private String username;

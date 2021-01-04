@@ -2,9 +2,7 @@ package com.rainbowrecorder.api.services;
 
 import com.rainbowrecorder.api.constants.ResponseTypes;
 import com.rainbowrecorder.api.models.Like;
-import com.rainbowrecorder.api.models.Post;
 import com.rainbowrecorder.api.repositories.LikeRepository;
-import org.apache.coyote.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
@@ -26,7 +23,6 @@ public class LikeService {
     public ResponseEntity<Object> likePost(Like like) {
         try {
             CompletableFuture<Like> completedFuture = likePostAsync(like);
-            // .get() should wait until the future returns before proceeding
             var returnedLike = completedFuture.get();
             var responseBody = new HashMap<String, Object>();
             responseBody.put(ResponseTypes.MESSAGE.label, "Posts successfully retrieved");
@@ -48,7 +44,6 @@ public class LikeService {
     public ResponseEntity<Object> unlikePost(Like like) {
         try {
             CompletableFuture<Void> completedFuture = unlikePostAsync(like);
-            // .get() should wait until the future returns before proceeding
             var returnedLike = completedFuture.get();
             var responseBody = new HashMap<String, Object>();
             responseBody.put(ResponseTypes.MESSAGE.label, "Posts successfully retrieved");

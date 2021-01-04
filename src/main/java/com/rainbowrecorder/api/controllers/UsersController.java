@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/users")
 public class UsersController {
@@ -13,57 +15,56 @@ public class UsersController {
     @Autowired
     private UserRepository userRepository;
 
-    private final UserService userService;
-
-    public UsersController (UserService userService) {
-        this.userService = userService;
-    }
+    @Autowired
+    private UserService userService;
 
     @GetMapping
-    public ResponseEntity<Object> checkUsernameAvailability(@RequestBody String username) {
+    public ResponseEntity<Object> checkUsernameAvailability(@RequestParam String username) {
         return userService.checkUsername(username);
     }
 
     @PostMapping
     @RequestMapping("/login")
-    public ResponseEntity<Object> logIn(@RequestBody String username, @RequestBody String password) {
-
+    public ResponseEntity logIn(@RequestBody Map<String, String> body) {
+        return userService.logIn(body.get("username"), body.get("password"));
     }
 
     @PostMapping
-    @RequestMapping("/register")
-    public ResponseEntity<Object> register(@RequestBody String username, @RequestBody String password) {
-
+    @RequestMapping(value = "/register")
+    public ResponseEntity<Object> register(@RequestBody Map<String, String> body) {
+        return userService.register(body.get("username"), body.get("password"));
     }
 
     @PostMapping
     @RequestMapping("/refresh")
-    public ResponseEntity<Object> refreshToken(@RequestBody String userId, @RequestBody String username) {
-
+    public ResponseEntity<Object> refreshToken(@RequestBody Map<String, String> body) {
+        return userService.refresh(body.get("userID"), body.get("username"));
     }
 
     @PutMapping
     @RequestMapping("/username")
-    public ResponseEntity<Object> changeUsername(@RequestBody String userId, @RequestBody String username) {
-
+    public ResponseEntity<Object> changeUsername(@RequestBody Map<String, String> body) {
+        return userService.changeUsername(body.get("userID"), body.get("newUsername"));
     }
 
     @PutMapping
     @RequestMapping("/password")
-    public ResponseEntity<Object> changeUsername(@RequestBody String userId, @RequestBody String oldPassword, @RequestBody String newPassword) {
-
+    public ResponseEntity<Object> changePassword(@RequestBody Map<String, String> body) {
+        return userService.changePassword(body.get("userID"), body.get("oldPassword"), body.get("newPassword"));
     }
 
     @PutMapping
     @RequestMapping("/screenname")
-    public ResponseEntity<Object> changeUsername(@RequestBody String userId, @RequestBody String screenName) {
-
+    public ResponseEntity<Object> changeScreenName(@RequestBody Map<String, String> body) {
+        return userService.changeScreenName(body.get("userID"), body.get("screenName"));
     }
 
     @PutMapping
     @RequestMapping("/profilepicture")
-    public ResponseEntity<Object> changeUsername(@RequestBody String userId, @RequestBody String timestamp, @RequestBody byte[] blob) {
-
+    public ResponseEntity<Object> changeProfilePicture(@RequestBody Map<String, String> body) {
+        System.out.println("received photo change request");
+        return userService.changeProfilePicture(body.get("userID"), body.get("timestamp"), body.get("blob"));
     }
 
 }
+

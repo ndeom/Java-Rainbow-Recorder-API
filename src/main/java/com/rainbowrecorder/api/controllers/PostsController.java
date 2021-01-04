@@ -7,6 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/posts")
 public class PostsController {
@@ -37,8 +40,8 @@ public class PostsController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> createPost(@RequestBody Post post) {
-        return postService.submitPost(post);
+    public ResponseEntity<Object> createPost(@RequestBody Map<String, Object> body) {
+        return postService.submitPost(body);
     }
 
 }

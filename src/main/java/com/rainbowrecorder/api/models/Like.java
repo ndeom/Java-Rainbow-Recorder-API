@@ -1,14 +1,23 @@
 package com.rainbowrecorder.api.models;
 
 import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.IdClass;
+import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity(name = "likes")
+@Table(schema = "main")
+@IdClass(LikeKey.class)
 public class Like {
 
-    public Like() {}
+    public Like() {
+    }
 
+    @Id
     private String user_id;
 
+    @Id
     private String post_id;
 
     public String getUser_id() {
@@ -27,4 +36,9 @@ public class Like {
         this.post_id = post_id;
     }
 
+}
+
+class LikeKey implements Serializable {
+    private String user_id;
+    private String post_id;
 }
